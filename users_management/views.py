@@ -1,7 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import User_Role, Ticket, Administrator
 
 # Create your views here.
+
+
+querysetUser_Role = User_Role.objects.all()
+querysetTicket = Ticket.objects.all()
+querysetAdministrator = Administrator.objects.all()
+
 
 projectsList = [
     {
