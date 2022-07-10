@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>all our customers</title>
+</head>
+<body>
+    {% block contect %}
+
+  <h1>all our customers</h1>  
+  <table>
+    <thead>
+        <tr>
+            <th> ID </th>
+            <th> Title </th>
+            <th> Description </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers%}
+        <tr>
+        <th> {{customer.id}}</th>
+        <th> {{customer.title}} </th>
+        <th> {{customer.description}}  {% if customer.active%} <strong> Active</strong> {% endif %}</th>
+        </tr>
+    
+        {% endfor%}
+
+    </tbody>
+  </table>
+   
+    {% endblock contect %}
+</body>
+</html>
