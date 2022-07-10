@@ -16,18 +16,21 @@
   <table>
     <thead>
         <tr>
+            <th> title </th>
+
             <th> ID </th>
-            <th> Title </th>
-            <th> Description </th>
+            <th> First Name: </th>
+            <th> last_Name </th>
 
         </tr>
     </thead>
     <tbody>
         {% for customer in customers%}
         <tr>
-        <th> {{customer.id}}</th>
-        <th> {{customer.title}} </th>
-        <th> {{customer.description}}  {% if customer.active%} <strong> Active</strong> {% endif %}</th>
+            <th><a href="{% url 'customer' customer.id %}">{{customer.first_Name}}</a> </th>
+         <th> {{customer.id}}</th>
+        <th> {{customer.first_Name}} </th>
+         <th> {{customer.last_Name}}  {% if customer.active%} <strong> Active</strong> {% endif %}</th> 
         </tr>
     
         {% endfor%}

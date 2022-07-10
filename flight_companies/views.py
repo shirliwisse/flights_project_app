@@ -1,6 +1,11 @@
 from django.shortcuts import render
+from .models import Country, Airline_Company, Flight
 
 # Create your views here.
+
+querysetCountry = Country.objects.all()
+querysetAirline_Company = Airline_Company.objects.all()
+querysetFlight = Flight.objects.all()
 
 projectsList = [
     {

@@ -1,8 +1,11 @@
-import re
+
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Customer
 
 # Create your views here.
+
+#querysetCustomer = Customer.objects.all()
 
 customers_list = [
     {
@@ -29,13 +32,16 @@ customers_list = [
 def customers(request):
     #name = 'Shirli Wisse'
     #age = 25
-    context = {'customers': customers_list}
+    customers = Customer.objects.all()
+    print('CUSTOMER:', customers)
+    context = {'customers': customers}
     return render(request, 'customers/customers.html', context)
 
 def customer(request, pk):
+    customerObj = Customer.objects.get(id=pk)
     single_customer = None
     for i in customers_list:
         if i['id']== str(pk):
             single_customer = i
-    return render(request, 'customers/customer.html', {'customer': single_customer })
+    return render(request, 'customers/customer.html', {'customer': customerObj })
    # return HttpResponse('This is our customer' + str(pk))
