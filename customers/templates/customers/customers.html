@@ -16,21 +16,20 @@
   <table>
     <thead>
         <tr>
-            <th> title </th>
-
-            <th> ID </th>
-            <th> First Name: </th>
-            <th> last_Name </th>
-
+            <th> Last Name:     </th>
+            <th> First Name:    </th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {% for customer in customers%}
         <tr>
-            <th><a href="{% url 'customer' customer.id %}">{{customer.first_Name}}</a> </th>
-         <th> {{customer.id}}</th>
-        <th> {{customer.first_Name}} </th>
-         <th> {{customer.last_Name}}  {% if customer.active%} <strong> Active</strong> {% endif %}</th> 
+            <td><a href="{% url 'customer' customer.id %}">{{customer.first_Name}}</a> </td>
+            <td><a href="{% url 'customer' customer.id %}">{{customer.last_Name}}</a></td>
+            <td>{% if customer.active%} <strong> Active</strong> {% endif %}</td> 
+            <td><a href="{% url 'update-customer' customer.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-customer' customer.id %}">Delete</a></td>
         </tr>
     
         {% endfor%}
