@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import User_Role, Ticket, Administrator
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -30,3 +32,7 @@ projectsList = [
 
 def users_management(request):
     return render(request, 'users_management/users_management.html', )
+
+@api_view(['GET','POST'])
+def apiOverview(request):
+    return JsonResponse('API BASE POINT', safe=False)

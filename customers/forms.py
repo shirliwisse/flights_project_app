@@ -6,5 +6,3 @@ class CustomerForm(ModelForm):
     class Meta:
         model = Customer
         fields = '__all__'
-        # 333333333333333333333333
-        exclude = ['user']

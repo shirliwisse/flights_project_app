@@ -1,18 +1,10 @@
 {% extends 'main.html' %}
+{% load static %}
+{% block contect %}
 
+<img style="width: 200px;" src="{% static 'images/profiles/cat.jpg' %}">
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>all our customers</title>
-</head>
-<body>
-    {% block contect %}
-
-  <h1>all our customers</h1>  
+<h1>all our customers</h1>  
   <table>
     <thead>
         <tr>
@@ -22,21 +14,18 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-        {% for customer in customers%}
-        <tr>
-            <td><a href="{% url 'customer' customer.id %}">{{customer.first_Name}}</a> </td>
-            <td><a href="{% url 'customer' customer.id %}">{{customer.last_Name}}</a></td>
-            <td>{% if customer.active%} <strong> Active</strong> {% endif %}</td> 
-            <td><a href="{% url 'update-customer' customer.id %}">Edit</a></td>
-            <td><a href="{% url 'delete-customer' customer.id %}">Delete</a></td>
-        </tr>
-    
-        {% endfor%}
+<tbody>
+    {% for customer in customers%}
+    <tr>
+        <td><a href="{% url 'customer' customer.id %}">{{customer.first_Name}}</a> </td>
+        <td><a href="{% url 'customer' customer.id %}">{{customer.last_Name}}</a></td>
+        <td>{% if customer.active%} <strong> Active</strong> {% endif %}</td> 
+        <td><a href="{% url 'update-customer' customer.id %}">Edit</a></td>
+        <td><a href="{% url 'delete-customer' customer.id %}">Delete</a></td>
+    </tr>
 
+    {% endfor%}
     </tbody>
-  </table>
+</table>
    
-    {% endblock contect %}
-</body>
-</html>
+{% endblock contect %}
