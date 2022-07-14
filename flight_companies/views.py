@@ -70,7 +70,6 @@ def updateCountry(request, pk):
         if form.is_valid():
             form.save()
             return redirect('countries')
-
     context = {'form': form}
     return render(request, 'countries/country-form.html', context) 
 
