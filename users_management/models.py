@@ -17,13 +17,6 @@ class User_Role(models.Model):
     def __str__(self):
         return self.role_name
 
-class Ticket(models.Model):
-    id = models.UUIDField(default=uuid.uuid4,unique=True,
-                            primary_key=True, editable=False)
-    flight = models.ForeignKey(Flight,on_delete=models.SET_NULL,null=True)
-    customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,null=True)
-    def __str__(self):
-        return (f"flight:{self.flight} customer:{self.customer}")
 
 class Administrator (models.Model):
     id = models.UUIDField(default=uuid.uuid4,unique=True,
