@@ -10,7 +10,7 @@ from flight_companies import Flight
 class Customer(models.Model):
     _id=models.AutoField(primary_key=True,editable=False)
     first_Name = models.CharField(max_length=20)
-    last_Name = models.CharField(max_length=20)
+    last_Name = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     phone_No = models.CharField(max_length=20,unique=True, null=True, blank=True)
     #credit_Card_No = models.CharField(max_length=16,unique=True, null=True, blank=True)

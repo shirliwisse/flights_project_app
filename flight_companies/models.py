@@ -8,12 +8,18 @@ import uuid
 class Country(models.Model):
     id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
     name = models.CharField(max_length=20,unique=True)
-    # image
+    flag = models.ImageField(null=True, blank=True)
     class Meta:
         verbose_name_plural = "countries"
     def __str__(self):
-        return self.name
-
+        return self.name   
+    @property
+    def imageURL(self):
+        try:
+            img = self.flag.url
+        except:
+            img = ''
+        return img
 
 class Airline_Company(models.Model):
     id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
