@@ -30,7 +30,7 @@ def index(r):
 
 # desc ,price,prodName,createdTime, _id
 @api_view(['GET','POST','DELETE','PUT'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def ticket(request,id=-1):
     print(request.user)
     if request.method == 'GET':    #method get all
@@ -104,7 +104,7 @@ def customers(request,id=-1):
         temp= Customer.objects.get(_id = id)
         temp.delete()
         return JsonResponse({'DELETE': id})
-    if request.method == 'PUT': #method delete a row
+    if request.method == 'PUT': #method change a row
         temp=Customer.objects.get(_id = id)
  
         temp.first_Name =request.data['first_Name']

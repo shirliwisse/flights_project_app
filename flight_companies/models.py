@@ -1,12 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
 
 # Create your models here.
 
 
 class Country(models.Model):
-    id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
+    _id=models.AutoField(primary_key=True,editable=False)
     name = models.CharField(max_length=20,unique=True)
     flag = models.ImageField(null=True, blank=True)
     class Meta:
@@ -22,7 +21,7 @@ class Country(models.Model):
         return img
 
 class Airline_Company(models.Model):
-    id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
+    _id=models.AutoField(primary_key=True,editable=False)
     name = models.CharField(max_length=20,unique=True)
     country = models.ForeignKey(Country,on_delete=models.SET_NULL,null=True)
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
@@ -31,10 +30,8 @@ class Airline_Company(models.Model):
     def __str__(self):
         return self.name
         
-
 class Flight(models.Model):
-    id = models.UUIDField(default=uuid.uuid4,unique=True,
-                            primary_key=True, editable=False)
+    _id=models.AutoField(primary_key=True,editable=False)
     airline_Company = models.ForeignKey(Airline_Company,on_delete=models.SET_NULL,null=True)
     destination_Country = models.ForeignKey(Country,related_name='flight_destanation',on_delete=models.SET_NULL,null=True)
     origin_Country = models.ForeignKey(Country,related_name='flight_origin',on_delete=models.SET_NULL,null=True)

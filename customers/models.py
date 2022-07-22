@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from flight_companies import Flight
+from flight_companies.models import Flight
 
 
 

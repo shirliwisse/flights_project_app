@@ -1,19 +1,21 @@
-from django.shortcuts import render, redirect
-from rest_framework.decorators import api_view
+from django.shortcuts import redirect, render
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, TicketSerializer
-from .models import Customer, Ticket
+from .models import Customer,Ticket
+
 
 # Create your views here.
 
 @api_view(['GET'])
-def tickets(request, pk=0):
-    if pk == '0':
+def tickets(request, id=-1):
+    if int(id) > -1:
+        customerObj = Customer.objects.get(_id=id)
+        serializer = CustomerSerializer(customerObj, many=False)
+    else:
         tickets = Ticket.objects.all()
         serializer = TicketSerializer(tickets, many=True)
-    else:
-        customerObj = Customer.objects.get(id=pk)
-        serializer = CustomerSerializer(customerObj, many=False)
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -23,35 +25,41 @@ def createTicket(request):
         serializer.save()
     return Response(serializer.data)
 
-@api_view(['POST'])
-def updateTicket(request, pk):
-    ticket = Ticket.objects.get(id=pk)
-    serializer = TicketSerializer(instance=ticket, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+@api_view(['PUT'])
+def updateTicket(request, id=-1):
+    if int(id) > -1:
+        ticket = Ticket.objects.get(_id=id)
+        serializer = TicketSerializer(instance=ticket, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return ("id does not exist")
 
 @api_view(['DELETE'])
-def deleteTicket(request,pk):
-    ticket = Ticket.objects.get(id=pk)
-    ticket.delete()
-    return Response("customer was deleted")
+def deleteTicket(request,id):
+    if int(id) > -1:
+        ticket = Ticket.objects.get(_id=id)
+        ticket.delete()
+        return Response("customer was deleted")
+    else:
+        return Response("id does not exist")
 
 
 
 
 
 @api_view(['GET'])
-def customers(request):
-    customers = Customer.objects.all()
-    serializer = CustomerSerializer(customers, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def customer(request, pk):
-    customerObj = Customer.objects.get(id=pk)
-    serializer = CustomerSerializer(customerObj, many=True)
-    return Response(serializer.data)
+#@permission_classes([IsAuthenticated])
+def customers(request,id=-1):
+    if request.method == 'GET':    #method get all
+        if int(id) > -1:    #get single product
+            customerObj = Customer.objects.get(_id=id)
+            serializer = CustomerSerializer(customerObj, many=False)
+        else:
+            customers = Customer.objects.all()
+            serializer = CustomerSerializer(customers, many=True)   ################can the 'many' be removed?
+        return Response(serializer.data)
 
 @api_view(['POST'])
 def createCustomer(request):
@@ -60,16 +68,23 @@ def createCustomer(request):
         serializer.save()
     return Response(serializer.data)
 
-@api_view(['POST'])
-def updateCustomer(request, pk):
-    customer = Customer.objects.get(id=pk)
-    serializer = CustomerSerializer(instance=customer, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+@api_view(['PUT'])
+def updateCustomer(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        customer = Customer.objects.get(_id=id)
+        serializer = CustomerSerializer(instance=customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteCustomer(request,pk):
-    customer = Customer.objects.get(id=pk)
-    customer.delete()
-    return Response("customer was deleted")
+def deleteCustomer(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        customer = Customer.objects.get(_id=id)
+        customer.delete()
+        return Response("customer was deleted")
+    else:
+        return Response("id does not exist")
+

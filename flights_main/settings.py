@@ -35,18 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'base.apps.BaseConfig',
  
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
-    
-    'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
-    'corsheaders',
 
     'customers',
     'flight_companies',
@@ -97,17 +92,16 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    'django.middleware.security.SecurityMiddleware',
-
     'corsheaders.middleware.CorsMiddleware',
-
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'flights_main.urls'

@@ -1,30 +1,63 @@
 from django.shortcuts import render, redirect
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import Country, Airline_Company, Flight
-from .forms import CountryForm
+from .serializers import *
+
 
 # Create your views here.
+
+
+@api_view(['GET'])
+#@permission_classes([IsAuthenticated])
+def countries(request,id=-1):
+    if request.method == 'GET':    #method get all
+        if int(id) > -1:    #get single product
+            customerObj = Country.objects.get(_id=id)
+            serializer = CountrySerializer(customerObj, many=False)
+        else:
+            countries = Country.objects.all()
+            serializer = CountrySerializer(countries, many=True)   ################can the 'many' be removed?
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def createCountry(request):
+    serializer = CountrySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def updateCountry(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        customer = Country.objects.get(_id=id)
+        serializer = CountrySerializer(instance=customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response("id does not exist")
+
+@api_view(['DELETE'])
+def deleteCountry(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        customer = Country.objects.get(_id=id)
+        customer.delete()
+        return Response("customer was deleted")
+    else:
+        return Response("id does not exist")
+
+
+
+
+
+
+
 
 querysetCountry = Country.objects.all()
 querysetAirline_Company = Airline_Company.objects.all()
 querysetFlight = Flight.objects.all()
 
-projectsList = [
-    {
-        'id': '1',
-        'title': 'Ecommerce Website',
-        'description': 'Fully functional ecommerce website'
-    },
-    {
-        'id': '2',
-        'title': 'Portfolio Website',
-        'description': 'A personal website to write articles and display work'
-    },
-    {
-        'id': '3',
-        'title': 'Social Network',
-        'description': 'An open source project built by the community'
-    }
-]
 
 def flight_copmanies(request):
     return render(request, 'flight_companies/flight_companies.html', )
