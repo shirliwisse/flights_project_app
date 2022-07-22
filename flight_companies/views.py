@@ -13,8 +13,8 @@ from .serializers import *
 def countries(request,id=-1):
     if request.method == 'GET':    #method get all
         if int(id) > -1:    #get single product
-            customerObj = Country.objects.get(_id=id)
-            serializer = CountrySerializer(customerObj, many=False)
+            countryObj = Country.objects.get(_id=id)
+            serializer = CountrySerializer(countryObj, many=False)
         else:
             countries = Country.objects.all()
             serializer = CountrySerializer(countries, many=True)   ################can the 'many' be removed?
@@ -30,8 +30,8 @@ def createCountry(request):
 @api_view(['PUT'])
 def updateCountry(request,id=-1):  #check if exist?
     if int(id) > -1:
-        customer = Country.objects.get(_id=id)
-        serializer = CountrySerializer(instance=customer, data=request.data)
+        country = Country.objects.get(_id=id)
+        serializer = CountrySerializer(instance=country, data=request.data)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
@@ -41,9 +41,91 @@ def updateCountry(request,id=-1):  #check if exist?
 @api_view(['DELETE'])
 def deleteCountry(request,id=-1):  #check if exist?
     if int(id) > -1:
-        customer = Country.objects.get(_id=id)
-        customer.delete()
-        return Response("customer was deleted")
+        country = Country.objects.get(_id=id)
+        country.delete()
+        return Response("country was deleted")
+    else:
+        return Response("id does not exist")
+
+
+@api_view(['GET'])
+#@permission_classes([IsAuthenticated])
+def airlineCompanies(request,id=-1):
+    if request.method == 'GET':    #method get all
+        if int(id) > -1:    #get single product
+            airlineCompanyObj = Airline_Company.objects.get(_id=id)
+            serializer = AirlineCompanySerializer(airlineCompanyObj, many=False)
+        else:
+            airlineCompanies = Airline_Company.objects.all()
+            serializer = AirlineCompanySerializer(airlineCompanies, many=True)   ################can the 'many' be removed?
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def createAirlineCompany(request):
+    serializer = AirlineCompanySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def updateAirlineCompany(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        airlineCompany = Airline_Company.objects.get(_id=id)
+        serializer = AirlineCompanySerializer(instance=airlineCompany, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response("id does not exist")
+
+@api_view(['DELETE'])
+def deleteAirlineCompany(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        airlineCompany = Airline_Company.objects.get(_id=id)
+        airlineCompany.delete()
+        return Response("airline company was deleted")
+    else:
+        return Response("id does not exist")
+
+
+
+
+@api_view(['GET'])
+#@permission_classes([IsAuthenticated])
+def flights(request,id=-1):
+    if request.method == 'GET':    #method get all
+        if int(id) > -1:    #get single product
+            flightObj = Flight.objects.get(_id=id)
+            serializer = FlightSerializer(flightObj, many=False)
+        else:
+            flights = Flight.objects.all()
+            serializer = FlightSerializer(flights, many=True)   ################can the 'many' be removed?
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def createFlight(request):
+    serializer = FlightSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def updateFlight(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        flight = Flight.objects.get(_id=id)
+        serializer = FlightSerializer(instance=flight, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response("id does not exist")
+
+@api_view(['DELETE'])
+def deleteFlight(request,id=-1):  #check if exist?
+    if int(id) > -1:
+        flight = Flight.objects.get(_id=id)
+        flight.delete()
+        return Response("flight was deleted")
     else:
         return Response("id does not exist")
 
@@ -54,64 +136,3 @@ def deleteCountry(request,id=-1):  #check if exist?
 
 
 
-querysetCountry = Country.objects.all()
-querysetAirline_Company = Airline_Company.objects.all()
-querysetFlight = Flight.objects.all()
-
-
-def flight_copmanies(request):
-    return render(request, 'flight_companies/flight_companies.html', )
-
-
-
-
-# Create your views here.
-
-#querysetcountry = country.objects.all()
-
-def countries(request):
-    countries = Country.objects.all()
-    print('COUNTRY:', countries)
-    context = {'countries': countries}
-    return render(request, 'countries/countries.html', context)
-
-def country(request, pk):
-    countryObj = Country.objects.get(id=pk)
-    context = {'country': countryObj}
-    return render(request, 'countries/country.html', context)
-
-
-def createCountry(request):
-    form = CountryForm()
-
-    if request.method == 'POST':
-        form = CountryForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('countries')
-
-    context = {'form': form}
-    return render(request, 'countries/country-form.html',context)
-
-
-def updateCountry(request, pk):
-    country = Country.objects.get(id=pk)
-    form = CountryForm(instance=country)
-
-    if request.method == 'POST':
-        form = CountryForm(request.POST, request.FILES, instance=country)
-        if form.is_valid():
-            form.save()
-            return redirect('countries')
-    context = {'form': form}
-    return render(request, 'countries/country-form.html', context) 
-
-
-def deleteCountry(request,pk):
-    country = Country.objects.get(id=pk)
-
-    if request.method == 'POST':
-        country.delete()
-        return redirect('countries')
-
-    return render(request, 'countries/delete.html', {'object':country})

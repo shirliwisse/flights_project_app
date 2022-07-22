@@ -6,7 +6,7 @@ class CountrySerializer(serializers.ModelSerializer):
         model = Country
         fields = '__all__'
 
-class Airline_CompanySerializer(serializers.ModelSerializer):
+class AirlineCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Airline_Company
         fields = '__all__'

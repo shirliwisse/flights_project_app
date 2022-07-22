@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import CustomerSerializer, TicketSerializer
-from .models import Customer,Ticket
+from .serializers import *
+from .models import Customer, Ticket
 
 
 # Create your views here.
