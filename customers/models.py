@@ -12,7 +12,6 @@ class Customer(models.Model):
     last_Name = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     phone_No = models.CharField(max_length=20,unique=True, null=True, blank=True)
-    #credit_Card_No = models.CharField(max_length=16,unique=True, null=True, blank=True)
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     def __str__(self):
         return (f"{self.last_Name} {self.first_Name}")

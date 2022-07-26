@@ -5,20 +5,25 @@ from .serializers import *
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
 def roles(request,pk=-1):
-    if request.method == 'GET':    #method get all
+    try:
         if int(pk) > -1:    #get single product
             roleObj = User_Role.objects.get(id=pk)
             serializer = RolesSerializer(roleObj, many=False)
         else:
             roles = User_Role.objects.all()
             serializer = RolesSerializer(roles, many=True)   ################can the 'many' be removed?
-        return Response(serializer.data)
+        return Response(status=status.HTTP_200_OK ,data=serializer.data)
+    except:
+        roles = User_Role.objects.all()
+        serializer = RolesSerializer(roles, many=True)   ################can the 'many' be removed?
+        return Response(status=status.HTTP_400_BAD_REQUEST ,data=serializer.data)
 
 @api_view(['POST'])
 def createRole(request):
@@ -53,14 +58,18 @@ def deleteRole(request,pk=-1):  #check if exist?
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
 def administrators(request,pk=-1):
-    if request.method == 'GET':    #method get all
+    try:
         if int(pk) > -1:    #get single product
             administratorObj = Administrator.objects.get(id=pk)
             serializer = AdminSerializer(administratorObj, many=False)
         else:
             administrators = Administrator.objects.all()
             serializer = AdminSerializer(administrators, many=True)   ################can the 'many' be removed?
-        return Response(serializer.data)
+        return Response(status=status.HTTP_200_OK ,data=serializer.data)
+    except:
+        administrators = Administrator.objects.all()
+        serializer = AdminSerializer(administrators, many=True)
+        return Response(status=status.HTTP_400_BAD_REQUEST ,data=serializer.data)
 
 @api_view(['POST'])
 def createAdministrator(request):

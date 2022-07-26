@@ -55,13 +55,18 @@ def users(request, pk=-1):
 
 @api_view(['GET'])
 def tickets(request, pk=-1):
-    if int(pk) > -1:
-        customerObj = Ticket.objects.get(id=pk)
-        serializer = TicketSerializer(customerObj, many=False)
-    else:
+    try:
+        if int(pk) > -1:
+            customerObj = Ticket.objects.get(id=pk)
+            serializer = TicketSerializer(customerObj, many=False)
+        else:
+            tickets = Ticket.objects.all()
+            serializer = TicketSerializer(tickets, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    except:
         tickets = Ticket.objects.all()
         serializer = TicketSerializer(tickets, many=True)
-    return Response(serializer.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.data)
 
 @api_view(['POST'])
 #@permission_classes([IsAuthenticated])
@@ -102,19 +107,20 @@ def deleteTicket(request,pk):
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def customers(request,pk=-1):
-    print("innnn")
-    if request.method == 'GET':    #method get all
+def customers(request,pk=-1):   
+    try:    #method get all
         if int(pk) > -1:    #get single product
             customerObj = Customer.objects.get(id=pk)
             serializer = CustomerSerializer(customerObj, many=False)
         else:
             customers = Customer.objects.all()
-            serializer = CustomerSerializer(customers, many=True)   ################can the 'many' be removed?
-        return Response(serializer.data)
-
-
-       
+            serializer = CustomerSerializer(customers, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    except:
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.data)   
+     
   
 @api_view(['POST'])
 def createCustomer(request):
