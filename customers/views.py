@@ -56,49 +56,39 @@ def users(request, pk=-1):
 @api_view(['GET'])
 def tickets(request, pk=-1):
     if int(pk) > -1:
-        customerObj = Customer.objects.get(id=pk)
-        serializer = CustomerSerializer(customerObj, many=False)
+        customerObj = Ticket.objects.get(id=pk)
+        serializer = TicketSerializer(customerObj, many=False)
     else:
         tickets = Ticket.objects.all()
         serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def createTicket(request):
-    print(request.data)
-    user = request.user #getting customer unfo or user what are the correct settings here
-    Customer.objects.create(body=request.data["ticket info"],user=user)
-    print(user)
-    ticket = user.ticket.all()
-    print(ticket)
     serializer = TicketSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
- 
-# @api_view(['POST'])
-# def addNote(request):
-#     print(request.data)
-#     user = request.user
-#     Note.objects.create(body=request.data["notebody"],user=user)
-#     print(user)
-#     notes = user.note_set.all()
-#     print(notes)
-#     serializer = NoteSerializer(notes, many=True)
-#     return Response(serializer.data)
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 
 @api_view(['PUT'])
 def updateTicket(request, pk=-1):
-    if int(pk) > -1:
+    try:
         ticket = Ticket.objects.get(id=pk)
         serializer = TicketSerializer(instance=ticket, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return ("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
 def deleteTicket(request,pk):
@@ -108,9 +98,6 @@ def deleteTicket(request,pk):
         return Response("ticket was deleted")
     else:
         return Response("id does not exist")
-
-
-
 
 
 @api_view(['GET'])

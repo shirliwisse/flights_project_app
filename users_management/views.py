@@ -8,19 +8,6 @@ from rest_framework.response import Response
 
 # Create your views here.
 
-
-
-# @api_view(['GET'])
-# def apiOverview(request):
-#     api_urls = {
-#         'List':'/roles-list/',
-#         'Detail View':'/roles-create/<str:pk>/',
-#         'Create':'/roles-create/',
-#         'Update':'/roles-update/<str:pk>/',
-#         'Delete':'/roles-delete/<str:pk>/',
-#     }
-#     return Response(api_urls)
-
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
 def roles(request,pk=-1):

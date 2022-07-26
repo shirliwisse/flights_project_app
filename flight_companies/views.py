@@ -10,10 +10,10 @@ from .serializers import *
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
-def countries(request,id=-1):
+def countries(request,pk=-1):
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            countryObj = Country.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            countryObj = Country.objects.get(id=pk)
             serializer = CountrySerializer(countryObj, many=False)
         else:
             countries = Country.objects.all()
@@ -28,9 +28,9 @@ def createCountry(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def updateCountry(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        country = Country.objects.get(_id=id)
+def updateCountry(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        country = Country.objects.get(id=pk)
         serializer = CountrySerializer(instance=country, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -39,9 +39,9 @@ def updateCountry(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteCountry(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        country = Country.objects.get(_id=id)
+def deleteCountry(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        country = Country.objects.get(id=pk)
         country.delete()
         return Response("country was deleted")
     else:
@@ -50,10 +50,10 @@ def deleteCountry(request,id=-1):  #check if exist?
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
-def airlineCompanies(request,id=-1):
+def airlineCompanies(request,pk=-1):
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            airlineCompanyObj = Airline_Company.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            airlineCompanyObj = Airline_Company.objects.get(id=pk)
             serializer = AirlineCompanySerializer(airlineCompanyObj, many=False)
         else:
             airlineCompanies = Airline_Company.objects.all()
@@ -68,9 +68,9 @@ def createAirlineCompany(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def updateAirlineCompany(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        airlineCompany = Airline_Company.objects.get(_id=id)
+def updateAirlineCompany(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        airlineCompany = Airline_Company.objects.get(id=pk)
         serializer = AirlineCompanySerializer(instance=airlineCompany, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -79,9 +79,9 @@ def updateAirlineCompany(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteAirlineCompany(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        airlineCompany = Airline_Company.objects.get(_id=id)
+def deleteAirlineCompany(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        airlineCompany = Airline_Company.objects.get(id=pk)
         airlineCompany.delete()
         return Response("airline company was deleted")
     else:
@@ -92,10 +92,10 @@ def deleteAirlineCompany(request,id=-1):  #check if exist?
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
-def flights(request,id=-1):
+def flights(request,pk=-1):
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            flightObj = Flight.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            flightObj = Flight.objects.get(id=pk)
             serializer = FlightSerializer(flightObj, many=False)
         else:
             flights = Flight.objects.all()
@@ -110,9 +110,9 @@ def createFlight(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def updateFlight(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        flight = Flight.objects.get(_id=id)
+def updateFlight(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        flight = Flight.objects.get(id=pk)
         serializer = FlightSerializer(instance=flight, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -121,9 +121,9 @@ def updateFlight(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteFlight(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        flight = Flight.objects.get(_id=id)
+def deleteFlight(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        flight = Flight.objects.get(id=pk)
         flight.delete()
         return Response("flight was deleted")
     else:

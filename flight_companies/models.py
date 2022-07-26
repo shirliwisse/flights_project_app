@@ -32,8 +32,8 @@ class Flight(models.Model):
     airline_Company = models.ForeignKey(Airline_Company,on_delete=models.SET_NULL,null=True)
     destination_Country = models.ForeignKey(Country,related_name='flight_destanation',on_delete=models.SET_NULL,null=True)
     origin_Country = models.ForeignKey(Country,related_name='flight_origin',on_delete=models.SET_NULL,null=True)
-    departure_Time = models.DateTimeField()
-    landing_Time = models.DateTimeField()
+    departure_Time = models.DateTimeField(null=True)
+    landing_Time = models.DateTimeField(null=True)
     remaining_Tickets = models.IntegerField()
     def __str__(self):
         return (f"{self.airline_Company} to {self.destination_Country}")
