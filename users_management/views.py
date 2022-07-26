@@ -23,10 +23,10 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
-def roles(request,id=-1):
+def roles(request,pk=-1):
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            roleObj = User_Role.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            roleObj = User_Role.objects.get(id=pk)
             serializer = RolesSerializer(roleObj, many=False)
         else:
             roles = User_Role.objects.all()
@@ -41,9 +41,9 @@ def createRole(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def updateRole(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        role = User_Role.objects.get(_id=id)
+def updateRole(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        role = User_Role.objects.get(id=pk)
         serializer = RolesSerializer(instance=role, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -52,9 +52,9 @@ def updateRole(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteRole(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        role = User_Role.objects.get(_id=id)
+def deleteRole(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        role = User_Role.objects.get(id=pk)
         role.delete()
         return Response("role was deleted")
     else:
@@ -65,10 +65,10 @@ def deleteRole(request,id=-1):  #check if exist?
 
 @api_view(['GET'])
 #@permission_classes([IsAuthenticated])
-def administrators(request,id=-1):
+def administrators(request,pk=-1):
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            administratorObj = Administrator.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            administratorObj = Administrator.objects.get(id=pk)
             serializer = AdminSerializer(administratorObj, many=False)
         else:
             administrators = Administrator.objects.all()
@@ -83,9 +83,9 @@ def createAdministrator(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def updateAdministrator(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        administrator = Administrator.objects.get(_id=id)
+def updateAdministrator(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        administrator = Administrator.objects.get(id=pk)
         serializer = AdminSerializer(instance=administrator, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -94,9 +94,9 @@ def updateAdministrator(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteAdministrator(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        administrator = Administrator.objects.get(_id=id)
+def deleteAdministrator(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        administrator = Administrator.objects.get(id=pk)
         administrator.delete()
         return Response("administrator was deleted")
     else:

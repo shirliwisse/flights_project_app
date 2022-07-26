@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 
 class User_Role(models.Model):
-    _id=models.AutoField(primary_key=True,editable=False)
     role_name = models.CharField(max_length=20,unique=True)
     class Meta:
         verbose_name_plural = "User Roles"
@@ -13,7 +12,6 @@ class User_Role(models.Model):
         return self.role_name
 
 class Administrator (models.Model):
-    _id=models.AutoField(primary_key=True,editable=False)
     first_Name = models.CharField(max_length=20)
     last_Name = models.CharField(max_length=20)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)

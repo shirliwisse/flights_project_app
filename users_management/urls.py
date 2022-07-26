@@ -3,11 +3,16 @@ from . import views
 
 urlpatterns = [
     path('users_management/', views.roles),
-    # path('api/', views.apiOverview, name='api-overview'),
-    
-    # path('roles-list/', views.rolesList, name='roles-list'),
-    # path('roles-details/<str:pk>/', views.rolesDetail, name='roles-details'),
-    # path('roles-create/', views.rolesCreate, name='roles-create'),
-    # path('roles-update/<str:pk>/', views.rolesUpdate, name='roles-update'),
-    # path('roles-delete/<str:pk>/', views.rolesDelete, name='roles-delete'),
+
+    path('administrators/', views.administrators, name="administrators"),
+    path('administrators/<str:pk>/', views.administrators, name="administrators"),
+    path('create-administrator/', views.createAdministrator, name='create-administrator'),
+    path('update-administrator/<str:pk>/', views.updateAdministrator, name='update-administrator'),
+    path('delete-administrator/<str:pk>/', views.deleteAdministrator, name='delete-administrator'),
+
+    path('roles/', views.roles, name="roles"),
+    path('roles/<str:pk>/', views.roles, name="roles"),
+    path('create-role/', views.createRole, name='create-role'),
+    path('update-role/<str:pk>/', views.updateRole, name='update-role'),
+    path('delete-role/<str:pk>/', views.deleteRole, name='delete-role'),
 ]

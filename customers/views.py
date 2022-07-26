@@ -1,3 +1,4 @@
+from distutils.log import debug
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -41,12 +42,21 @@ def getRoutes(request):
 
 # from django.contrib.admin.views.decorators import //staff_member_required @staff_member_required
  
+@api_view(['GET'])
+def users(request, pk=-1):
+    if int(pk) > -1:
+        userObj = User.objects.get(id=pk)
+        serializer = UserSerializer(userObj, many=False)
+    else:
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
-def tickets(request, id=-1):
-    if int(id) > -1:
-        customerObj = Customer.objects.get(_id=id)
+def tickets(request, pk=-1):
+    if int(pk) > -1:
+        customerObj = Customer.objects.get(id=pk)
         serializer = CustomerSerializer(customerObj, many=False)
     else:
         tickets = Ticket.objects.all()
@@ -80,9 +90,9 @@ def createTicket(request):
 
 
 @api_view(['PUT'])
-def updateTicket(request, id=-1):
-    if int(id) > -1:
-        ticket = Ticket.objects.get(_id=id)
+def updateTicket(request, pk=-1):
+    if int(pk) > -1:
+        ticket = Ticket.objects.get(id=pk)
         serializer = TicketSerializer(instance=ticket, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -91,9 +101,9 @@ def updateTicket(request, id=-1):
         return ("id does not exist")
 
 @api_view(['DELETE'])
-def deleteTicket(request,id):
-    if int(id) > -1:
-        ticket = Ticket.objects.get(_id=id)
+def deleteTicket(request,pk):
+    if int(pk) > -1:
+        ticket = Ticket.objects.get(id=pk)
         ticket.delete()
         return Response("ticket was deleted")
     else:
@@ -105,11 +115,11 @@ def deleteTicket(request,id):
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def customers(request,id=-1):
+def customers(request,pk=-1):
     print("innnn")
     if request.method == 'GET':    #method get all
-        if int(id) > -1:    #get single product
-            customerObj = Customer.objects.get(_id=id)
+        if int(pk) > -1:    #get single product
+            customerObj = Customer.objects.get(id=pk)
             serializer = CustomerSerializer(customerObj, many=False)
         else:
             customers = Customer.objects.all()
@@ -121,12 +131,8 @@ def customers(request,id=-1):
   
 @api_view(['POST'])
 def createCustomer(request):
-    # User.objects.create_user(username='john2311',
-    #                              email='jlen34non@beatl1es1.com',
-    #                              password='gl44ass onion11')
-    # create seri for user
-    #User.object.get to get the new user as new varibale and then to send in line 129 (instance=user the new user I get i will send it in line 129)
     serializer = CustomerSerializer(data=request.data)
+    print(serializer)
     try:
         if serializer.is_valid():
             serializer.save()
@@ -138,14 +144,10 @@ def createCustomer(request):
             return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
    
 
-
-  
-
-
 @api_view(['PUT'])
-def updateCustomer(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        customer = Customer.objects.get(_id=id)
+def updateCustomer(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        customer = Customer.objects.get(id=pk)
         serializer = CustomerSerializer(instance=customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -154,9 +156,9 @@ def updateCustomer(request,id=-1):  #check if exist?
         return Response("id does not exist")
 
 @api_view(['DELETE'])
-def deleteCustomer(request,id=-1):  #check if exist?
-    if int(id) > -1:
-        customer = Customer.objects.get(_id=id)
+def deleteCustomer(request,pk=-1):  #check if exist?
+    if int(pk) > -1:
+        customer = Customer.objects.get(id=pk)
         customer.delete()
         return Response("customer was deleted")
     else:

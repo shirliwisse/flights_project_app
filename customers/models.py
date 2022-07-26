@@ -8,7 +8,6 @@ from flight_companies.models import Flight
 
 
 class Customer(models.Model):
-    _id=models.AutoField(primary_key=True,editable=False)
     first_Name = models.CharField(max_length=20)
     last_Name = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=50, null=True, blank=True)
@@ -19,8 +18,7 @@ class Customer(models.Model):
         return (f"{self.last_Name} {self.first_Name}")
 
 class Ticket(models.Model):
-    _id=models.AutoField(primary_key=True,editable=False)
     flight = models.ForeignKey(Flight,on_delete=models.SET_NULL,null=True)
     customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,null=True)
     def __str__(self):
-        return (f"flight:{self.flight} customer:{self.customer}")
+        return (f"flight: {self.flight} customer: {self.customer}")
