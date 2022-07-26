@@ -1,7 +1,11 @@
 from distutils.log import debug
+from turtle import width
+from urllib import response
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.urls import is_valid_path
+from django.db import IntegrityError,transaction
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -81,7 +85,6 @@ def createTicket(request):
     except Exception as ex:
             return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
-
 @api_view(['PUT'])
 def updateTicket(request, pk=-1):
     try:
@@ -105,6 +108,8 @@ def deleteTicket(request,pk):
         return Response("id does not exist")
 
 
+
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def customers(request,pk=-1):   
@@ -121,22 +126,27 @@ def customers(request,pk=-1):
         serializer = CustomerSerializer(customers, many=True)
         return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.data)   
      
-  
 @api_view(['POST'])
 def createCustomer(request):
-    serializer = CustomerSerializer(data=request.data)
-    print(serializer)
-    try:
-        if serializer.is_valid():
-            serializer.save()
-            print("done:test")
-            return Response(status=status.HTTP_200_OK, data=serializer.data)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
-    except Exception as ex:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+    with transaction.atomic():
+        try:
+            userSerializer = UserSerializer(data=request.data)
+            if userSerializer.is_valid():
+                try:
+                    userSerializer.save()
+                except IntegrityError as ex:
+                    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data=ex)
+                user = User.objects.get(email = userSerializer.data["email"])
+                customerSerializer = CustomerSerializer(instance=user, data=request.data)
+                if customerSerializer.is_valid():
+                    customer = customerSerializer.save()
+                    return Response(status=status.HTTP_200_OK, data=customerSerializer.data)
+                else:
+                    return Response(status=status.HTTP_400_BAD_REQUEST, data= customerSerializer.errors)
+        except Exception as ex:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
-
 @api_view(['PUT'])
 def updateCustomer(request,pk=-1):  #check if exist?
     if int(pk) > -1:
