@@ -1,20 +1,19 @@
-from distutils.log import debug
-from turtle import width
-from urllib import response
-from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.urls import is_valid_path
 from django.db import IntegrityError,transaction
-from rest_framework import permissions
+from rest_framework import permissions,status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import *
+
+from flight_companies.views import flights
+from .serializers import FlightRTSerializer, UserSerializer, CustomerSerializer, TicketSerializer
+from flight_companies.serializers import FlightSerializer
+from flight_companies.models import Flight
 from .models import Customer, Ticket
-from rest_framework import status
 
 
 # Create your views here.
@@ -48,14 +47,18 @@ def getRoutes(request):
  
 @api_view(['GET'])
 def users(request, pk=-1):
-    if int(pk) > -1:
-        userObj = User.objects.get(id=pk)
-        serializer = UserSerializer(userObj, many=False)
-    else:
+    try:
+        if int(pk) > -1:
+            userObj = User.objects.get(id=pk)
+            serializer = UserSerializer(userObj, many=False)
+        else:
+            users = User.objects.all()
+            serializer = UserSerializer(users, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    except:
         users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
+        serializer = User(users, many=True)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.data)
 
 @api_view(['GET'])
 def tickets(request, pk=-1):
@@ -75,18 +78,22 @@ def tickets(request, pk=-1):
 @api_view(['POST'])
 #@permission_classes([IsAuthenticated])
 def createTicket(request):
+    # flight = Flight.objects.get(id=request.data["flight"])
+    # remainingTickets = FlightRTSerializer(instance=flight)
     serializer = TicketSerializer(data=request.data)
+    # print(remainingTickets)
     try:
-        if serializer.is_valid():
+        if serializer.is_valid(): #and flight.remaining_Tickets>0:
             serializer.save()
             return Response(status=status.HTTP_200_OK, data=serializer.data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
     except Exception as ex:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+
 
 @api_view(['PUT'])
-def updateTicket(request, pk=-1):
+def updateTicket(request, pk):
     try:
         ticket = Ticket.objects.get(id=pk)
         serializer = TicketSerializer(instance=ticket, data=request.data)
@@ -96,16 +103,16 @@ def updateTicket(request, pk=-1):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
     except Exception as ex:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
-def deleteTicket(request,pk):
-    if int(pk) > -1:
+def deleteTicket(request,pk=-1):
+    try:
         ticket = Ticket.objects.get(id=pk)
         ticket.delete()
-        return Response("ticket was deleted")
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data="ticket was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
 
 
@@ -148,22 +155,30 @@ def createCustomer(request):
     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
 @api_view(['PUT'])
-def updateCustomer(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+def updateCustomer(request,pk):  #check if exist?
+    try:
         customer = Customer.objects.get(id=pk)
         serializer = CustomerSerializer(instance=customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
 @api_view(['DELETE'])
-def deleteCustomer(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+def deleteCustomer(request,pk):  #check if exist?
+    try:
         customer = Customer.objects.get(id=pk)
         customer.delete()
-        return Response("customer was deleted")
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data="customer was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
+
+
+
+def getRemainingTickets(id=3):
+    flight = Flight.objects.get(id=id)
+    print(flight)

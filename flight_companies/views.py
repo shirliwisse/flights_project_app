@@ -29,29 +29,35 @@ def countries(request,pk=-1):
 @api_view(['POST'])
 def createCountry(request):
     serializer = CountrySerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK ,data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['PUT'])
 def updateCountry(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         country = Country.objects.get(id=pk)
         serializer = CountrySerializer(instance=country, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
 def deleteCountry(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         country = Country.objects.get(id=pk)
         country.delete()
-        return Response("country was deleted")
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data="country was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
+
 
 
 @api_view(['GET'])
@@ -73,30 +79,36 @@ def airlineCompanies(request,pk=-1):
 @api_view(['POST'])
 def createAirlineCompany(request):
     serializer = AirlineCompanySerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+    
 @api_view(['PUT'])
-def updateAirlineCompany(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+def updateAirlineCompany(request,pk):  #check if exist?
+    try:
         airlineCompany = Airline_Company.objects.get(id=pk)
         serializer = AirlineCompanySerializer(instance=airlineCompany, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
 def deleteAirlineCompany(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         airlineCompany = Airline_Company.objects.get(id=pk)
         airlineCompany.delete()
-        return Response("airline company was deleted")
-    else:
-        return Response("id does not exist")
-
+        return Response(status=status.HTTP_200_OK, data="airline company was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
 
 
@@ -119,29 +131,37 @@ def flights(request,pk=-1):
 @api_view(['POST'])
 def createFlight(request):
     serializer = FlightSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['PUT'])
-def updateFlight(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+def updateFlight(request,pk):  #check if exist?
+    try:
         flight = Flight.objects.get(id=pk)
         serializer = FlightSerializer(instance=flight, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
+
 
 @api_view(['DELETE'])
 def deleteFlight(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         flight = Flight.objects.get(id=pk)
         flight.delete()
-        return Response("flight was deleted")
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data="ticket was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
 
 

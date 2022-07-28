@@ -28,31 +28,36 @@ def roles(request,pk=-1):
 @api_view(['POST'])
 def createRole(request):
     serializer = RolesSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['PUT'])
 def updateRole(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         role = User_Role.objects.get(id=pk)
         serializer = RolesSerializer(instance=role, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
 def deleteRole(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         role = User_Role.objects.get(id=pk)
         role.delete()
-        return Response("role was deleted")
-    else:
-        return Response("id does not exist")
-
-
+        return Response(status=status.HTTP_200_OK, data="role was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
 
 
 @api_view(['GET'])
@@ -74,27 +79,35 @@ def administrators(request,pk=-1):
 @api_view(['POST'])
 def createAdministrator(request):
     serializer = AdminSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    try:
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['PUT'])
 def updateAdministrator(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         administrator = Administrator.objects.get(id=pk)
         serializer = AdminSerializer(instance=administrator, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response("id does not exist")
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= serializer.errors)
+    except Exception as ex:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data= {"message": ex})
 
 @api_view(['DELETE'])
 def deleteAdministrator(request,pk=-1):  #check if exist?
-    if int(pk) > -1:
+    try:
         administrator = Administrator.objects.get(id=pk)
         administrator.delete()
-        return Response("administrator was deleted")
-    else:
-        return Response("id does not exist")
+        return Response(status=status.HTTP_200_OK, data="administrator was deleted")
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="id does not exist")
+
 
