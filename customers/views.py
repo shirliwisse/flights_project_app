@@ -10,8 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from flight_companies.views import flights
-from .serializers import FlightRTSerializer, UserSerializer, CustomerSerializer, TicketSerializer
-from flight_companies.serializers import FlightSerializer
+from .serializers import UserSerializer, CustomerSerializer, TicketSerializer
 from flight_companies.models import Flight
 from .models import Customer, Ticket
 
